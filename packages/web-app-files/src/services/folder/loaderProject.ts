@@ -4,6 +4,7 @@ import { useTask } from 'vue-concurrency'
 import { isLocationSpacesActive } from '../../router'
 import { clientService } from 'web-pkg/src/services'
 import { buildResource, buildSpace, buildWebDavSpacesPath } from '../../helpers/resources'
+import { DavProperties } from 'web-pkg/src/constants'
 
 export class FolderLoaderProject implements FolderLoader {
   public isEnabled(router: Router): boolean {
@@ -31,7 +32,9 @@ export class FolderLoaderProject implements FolderLoader {
       ref.space = buildSpace(graphResponse.data)
 
       const webDavResponse = yield ref.$client.files.list(
-        buildWebDavSpacesPath(ref.$route.params.spaceId, path || '')
+        buildWebDavSpacesPath(ref.$route.params.spaceId, path || ''),
+        1,
+        DavProperties.Default
       )
 
       let resources = []
